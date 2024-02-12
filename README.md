@@ -1,4 +1,5 @@
 # gemini-utils
+
 A set of Python scripts to interact with Gemini Pro
 
 ## Description
@@ -22,6 +23,10 @@ Install the requirements in a virtual environment:
     python -m venv .venv
     source .venv/bin/activate
     pip install -r requirements.txt
+
+To create an executable that runs outside of the virtual environment:
+
+    pyinstaller --onefile gemini-chat.py
 
 ## Run
 
