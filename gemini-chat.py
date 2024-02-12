@@ -10,21 +10,35 @@ def main():
                         help='the query for Gemini Pro')
     parser.add_argument('-c', '--candidates', dest='candidates', action='store_true',
                         default=False, help='display all candidates if more than one')
+    parser.add_argument('-m', '--list-models', dest='list_models', action='store_true',
+                        default=False, help='display all models available')
     parser.add_argument('-i', '--image', dest='image', default=None, 
                         help='pass an image as part of a query')
     args = parser.parse_args()
 
+    # Construct query if present
+    query = []
+    if args.query != "":
+        query.append(" ".join(args.query))
     if args.image is not None:
         img = PIL.Image.open(args.image)
         model = genai.GenerativeModel('gemini-pro-vision')
-        response = model.generate_content([" ".join(args.query), img])
+        query.append(img)
     else:
         model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(" ".join(args.query))
-    print(response.text)
+    if len(query) > 0:
+        response = model.generate_content(query)
+        print(response.text)
 
+    # Print candidates JSON if requested
     if args.candidates:
         print(response.candidates)
+
+    # List models if requested
+    if args.list_models:
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                print(m.name)
 
 if __name__ == "__main__":
     main()
