@@ -32,7 +32,10 @@ def main():
 
     # Print candidates JSON if requested
     if args.candidates:
-        print(response.candidates)
+        if args.query != "":
+            print(response.candidates)
+        else:
+            print("To list candidates, enter a query")
 
     # List models if requested
     if args.list_models:
